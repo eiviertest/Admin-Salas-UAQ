@@ -13,8 +13,16 @@ class CreatePersonasTable extends Migration
      */
     public function up()
     {
-        Schema::create('personas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('persona', function (Blueprint $table) {
+            $table->id('idPer');
+            $table->string('nomPer', 50);
+            $table->string('apePatPer', 30);
+            $table->string('apeMatPer', 30);
+            $table->bigInteger('telPer');
+            $table->foreignId('idUsr');
+            $table->foreignId('idArea');
+            $table->foreign('idUsr')->references('id')->on('users');
+            $table->foreign('idArea')->references('idArea')->on('area');
             $table->timestamps();
         });
     }
@@ -26,6 +34,6 @@ class CreatePersonasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personas');
+        Schema::dropIfExists('persona');
     }
 }

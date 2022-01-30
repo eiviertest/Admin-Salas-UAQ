@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Persona;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -35,18 +36,27 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
+
+        
+        //Datos Persona
+        $persona = Persona::create([
+            'nombre' => $request->nombre,
+            'apePatPer' => $request->apePatPer,
+            'apeMatPer' => $request->apeMatPer,
+            'telPer' => $request->telPer,
+            'idArea' => $request->area,
+            'idUsr' => $user->id,
+        ]);
 
         Auth::login($user);
 

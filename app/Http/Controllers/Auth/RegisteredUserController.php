@@ -49,14 +49,14 @@ class RegisteredUserController extends Controller
 
         
         //Datos Persona
-        $persona = Persona::create([
-            'nombre' => $request->nombre,
-            'apePatPer' => $request->apePatPer,
-            'apeMatPer' => $request->apeMatPer,
-            'telPer' => $request->telPer,
-            'idArea' => $request->area,
-            'idUsr' => $user->id,
-        ]);
+        $persona = new Persona();
+        $persona->nomPer = $request->nomPer;
+        $persona->apePatPer = $request->apePatPer;
+        $persona->apeMatPer = $request->apeMatPer;
+        $persona->telPer = $request->telPer;
+        $persona->idArea = $request->idArea;
+        $persona->idUsr = $user->id;
+        $persona->save();
 
         Auth::login($user);
 

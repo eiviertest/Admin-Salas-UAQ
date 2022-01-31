@@ -9,6 +9,8 @@ class Persona extends Model
 {
     use HasFactory;
 
+    protected $table = 'persona';
+
     protected $primaryKey = 'idPer';
 
     protected $fillable = [

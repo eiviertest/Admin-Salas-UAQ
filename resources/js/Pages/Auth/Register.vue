@@ -10,12 +10,12 @@
         </div>
 
         <div>
-            <BreezeLabel for="apePatPer" value="ApellidoPaterno" />
+            <BreezeLabel for="apePatPer" value="Apellido Paterno" />
             <BreezeInput id="apePatPer" type="text" class="mt-1 block w-full" v-model="form.apePatPer" required autofocus autocomplete="Apellido Paterno" />
         </div>
 
         <div>
-            <BreezeLabel for="apeMatPer" value="ApellidoMaterno" />
+            <BreezeLabel for="apeMatPer" value="Apellido Materno" />
             <BreezeInput id="apeMatPer" type="text" class="mt-1 block w-full" v-model="form.apeMatPer" required autofocus autocomplete="Apellido Materno" />
         </div>
 
@@ -30,27 +30,27 @@
         </div>
 
         <div>
-            <BreezeLabel for="idArea" value="¿A qué área pertenece?" />
+            <BreezeLabel for="idArea" value="¿A qué área, institución o facultad pertenece?" />
             <BreezeInput id="idArea" type="number" class="mt-1 block w-full" v-model="form.idArea" required autofocus />
         </div>
 
         <div class="mt-4">
-            <BreezeLabel for="password" value="Password" />
+            <BreezeLabel for="password" value="Contraseña" />
             <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
         </div>
 
         <div class="mt-4">
-            <BreezeLabel for="password_confirmation" value="Confirm Password" />
+            <BreezeLabel for="password_confirmation" value="Confirmar contraseña" />
             <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
             <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Already registered?
+                Ya estoy registrado
             </Link>
 
             <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Register
+                Registrarse
             </BreezeButton>
         </div>
     </form>

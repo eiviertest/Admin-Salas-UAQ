@@ -14,7 +14,7 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
         $areas = Area::orderBy('nomArea', 'ASC')->paginate(10);
         return ['areas' => $areas];
     }
@@ -46,7 +46,7 @@ class AreaController extends Controller
      */
     public function update(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
         validarDatos($request);
         try {
             $area = Area::findOrFail($request->id);
@@ -72,7 +72,7 @@ class AreaController extends Controller
      */
     public function destroy($id)
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
         try {
             $area = Area::findOrFail($id);
             $area->delete();

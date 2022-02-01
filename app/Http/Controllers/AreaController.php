@@ -14,17 +14,9 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //if(!$request->ajax()) return redirect('/');
+        $areas = Area::orderBy('nomArea', 'ASC')->paginate(10);
+        return ['areas' => $areas];
     }
 
     /**
@@ -33,53 +25,60 @@ class AreaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Area $area)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Area $area)
-    {
-        //
+    public function store(Request $request) {
+        if(!$request->ajax()) return redirect('/');
+        validarDatos($request);
+        try {
+            $area = new Area();
+            $area->nomArea = $request->nomArea;
+            $area->save();
+            return ['mensaje' => 'Ha sido guardada el área'];
+        } catch (exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Area $area)
+    public function update(Request $request)
     {
-        //
+        //if(!$request->ajax()) return redirect('/');
+        validarDatos($request);
+        try {
+            $area = Area::findOrFail($request->id);
+            $area->nomArea = $request->nomArea;
+            $area->save();
+            return ['mensaje' => 'Ha sido actualizada el área'];
+        } catch (exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function validarDatos(Request $request) {
+        $request->validate([
+            'nomArea' => 'required|string|text|max:200|unique:area',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Area  $area
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function destroy($id)
     {
-        //
+        //if(!$request->ajax()) return redirect('/');
+        try {
+            $area = Area::findOrFail($id);
+            $area->delete();
+            return ['mensaje' => 'Ha sido eliminada el área'];
+        } catch (exception $e) {
+            return $e->getMessage();
+        }
     }
 }

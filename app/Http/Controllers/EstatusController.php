@@ -10,9 +10,10 @@ class EstatusController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         $estados = Estatus::orderBy('nomEst', 'ASC')->paginate(10);
@@ -73,9 +74,10 @@ class EstatusController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if(!$request->ajax()) return redirect('/');
         try {

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AreaController;
+use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {

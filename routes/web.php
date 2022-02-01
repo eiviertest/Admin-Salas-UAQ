@@ -31,3 +31,5 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/area.php';
 require __DIR__.'/sala.php';
+require __DIR__.'/curso.php';
+require __DIR__.'/estatus.php';

@@ -60,7 +60,7 @@ class AreaController extends Controller
 
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomArea' => 'required|string|text|max:200|unique:area',
+            'nomArea' => 'required|string|max:200|unique:area',
         ]);
     }
 

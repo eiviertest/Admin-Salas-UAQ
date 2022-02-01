@@ -66,7 +66,7 @@ class EstatusController extends Controller
      */
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomSal' => 'required|string|text|max:200|unique:estatus',
+            'nomSal' => 'required|string|max:200|unique:estatus',
         ]);
     }
 

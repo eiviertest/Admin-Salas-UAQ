@@ -47,7 +47,7 @@ class SalaController extends Controller
      */
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomSala' => 'required|string|text|max:200|unique:sala',
+            'nomSala' => 'required|string|max:200|unique:sala',
         ]);
     }
 

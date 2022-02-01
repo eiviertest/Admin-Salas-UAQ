@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sala;
+use App\Models\Estatus;
 use Illuminate\Http\Request;
 
-class SalaController extends Controller
+class EstatusController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -16,8 +16,8 @@ class SalaController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $salas = Sala::orderBy('nomSala', 'ASC')->paginate(10);
-        return ['salas' => $salas];
+        $estados = Estatus::orderBy('nomEst', 'ASC')->paginate(10);
+        return ['estados' => $estados];
     }
 
     /**
@@ -31,10 +31,29 @@ class SalaController extends Controller
         if(!$request->ajax()) return redirect('/');
         validarDatos($request);
         try {
-            $sala = new Sala();
-            $sala->nomSala = $request->nomSala;
-            $sala->save();
-            return ['mensaje' => 'Ha sido guardada la sala'];
+            $estatus = new Estatus();
+            $estatus->nomEstatus = $request->nomEstatus;
+            $estatus->save();
+            return ['mensaje' => 'Ha sido guardado el estado'];
+        } catch (exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function update(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+        validarDatos($request);
+        try {
+            $estatus = Estatus::findOrFail($request->id);
+            $estatus->nomEstatus = $request->nomEstatus;
+            $estatus->save();
+            return ['mensaje' => 'Ha sido actualizado el estado'];
         } catch (exception $e) {
             return $e->getMessage();
         }
@@ -47,43 +66,24 @@ class SalaController extends Controller
      */
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomSala' => 'required|string|text|max:200|unique:sala',
+            'nomSal' => 'required|string|text|max:200|unique:estatus',
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
-        try {
-            $sala = Sala::findOrFail($request->id);
-            $sala->nomSala = $request->nomSala;
-            $sala->save();
-            return ['mensaje' => 'Ha sido actualizada la sala'];
-        } catch (exception $e) {
-            return $e->getMessage();
-        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $sala = Sala::findOrFail($id);
-            $sala->delete();
-            return ['mensaje' => 'Ha sido eliminada la sala'];
+            $estatus = Estatus::findOrFail($id);
+            $estatus->delete();
+            return ['mensaje' => 'Ha sido eliminado el estado'];
         } catch (exception $e) {
             return $e->getMessage();
         }

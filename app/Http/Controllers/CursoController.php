@@ -10,21 +10,32 @@ class CursoController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
+        $cursos = Curso::orderBy('nomCur', 'ASC')->paginate(10);
+        return ['cursos' => $cursos];
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
      */
-    public function create()
-    {
-        //
+    public function validarDatos(Request $request) {
+        $request->validate([
+            'nomCur' => 'required|string|max:200|unique:sala',
+            'fecInCur' => 'required|date',
+            'fecFinCur' => 'required|date',
+            'reqCur' => 'required|string|max:100',
+            'durCur' => 'required|int|max:40',
+            'estado' => 'required|bool',
+            'cupCur' => 'required|int|max:1',
+            'idSala' => 'required|int',
+        ]);
     }
 
     /**
@@ -35,67 +46,22 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Curso $curso)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Curso $curso)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
         if(!$request->ajax()) return redirect('/');
         validarDatos($request);
         try {
-            $curso = Curso::findOrFail($request->id);
+            $curso = new Curso();
             $curso->nomCur = $request->nomCur;
+            $curso->fecInCur = $request->fecInCur;
+            $curso->fecFinCur = $request->fecFinCur;
+            $curso->reqCur = $request->reqCur;
+            $curso->durCur = $request->durCur;
+            $curso->estado = 'true';
+            $curso->cupCur = $request->cupCur;
             $curso->save();
-            return ['mensaje' => 'Ha sido actualizado el curso'];
+            return ['mensaje' => 'Ha sido guardado el curso'];
         } catch (exception $e) {
             return $e->getMessage();
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function validarDatos(Request $request) {
-        $request->validate([
-            'nomCur' => 'required|string|max:200|unique:curso',
-            'fecInCur' => 'required|date',
-            'fecFinCur' => 'required|date',
-            'reqCur' => 'required|string|max:255',
-            'durCur' => 'required|int',
-            'estado' => 'required',
-            'cupCur' => 'required|max:99|int',
-            'idSala' => 'required|max:3|int',
-        ]);
     }
 
     /**

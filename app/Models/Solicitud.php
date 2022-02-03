@@ -19,4 +19,16 @@ class Solicitud extends Model
         'idPer',
         'idEst'
     ];
+
+    public function persona(){
+        return $this->belongsTo(Persona::class, 'idPer');
+    }
+
+    public function estatus(){
+        return $this->hasOne(Estatus::class);
+    }
+
+    public function sala(){
+        return $this->hasOne(Sala::class);
+    }
 }

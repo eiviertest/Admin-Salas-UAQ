@@ -18,4 +18,8 @@ class HorarioCurso extends Model
         'horFin',
         'idCur'
     ];
+
+    public function curso(){
+        return $this->belongsTo(Curso::class, 'idCur');
+    }
 }

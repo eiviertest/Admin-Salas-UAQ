@@ -16,4 +16,8 @@ class Sala extends Model
     protected $fillable = [
         'nomSala'
     ];
+
+    public function cursos(){
+        return $this->hasMany(Curso::class, 'idSala');
+    }
 }

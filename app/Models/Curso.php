@@ -21,6 +21,18 @@ class Curso extends Model
         'durCur',
         'estado',
         'cupCur',
-        'idsala'
+        'idSala'
     ];
+
+    public function horarioscurso(){
+        return $this->hasMany(HorarioCurso::class, 'idCur');
+    }
+
+    public function sala(){
+        return $this->belongsTo(Sala::class, 'idSala');
+    }
+
+    public function personas() {
+        return $this->belongsToMany(Persona::clas, 'curso_persona');
+    }
 }

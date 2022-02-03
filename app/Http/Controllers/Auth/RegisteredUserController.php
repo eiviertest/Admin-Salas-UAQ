@@ -39,20 +39,18 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'nomPer' => 'required|string|max:200',
-            'apePatPer' => 'required|string|text|max:200',
-            'apeMatPer' => 'string|text|text:200',
-            'telPer' => 'int|number|max:10'
+            'apePatPer' => 'required|string|max:200',
+            'apeMatPer' => 'string|max:200',
+            'telPer' => 'int|max:10' 
         ]);
 
-        $user = User::create([
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-        
-        //Datos Persona
         try {
+            $user = User::create([
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            event(new Registered($user));
+            //Datos Persona
             $persona = new Persona();
             $persona->nomPer = $request->nomPer;
             $persona->apePatPer = $request->apePatPer;
@@ -61,7 +59,6 @@ class RegisteredUserController extends Controller
             $persona->idArea = $request->idArea;
             $persona->idUsr = $user->id;
             $persona->save();
-            return ['mensaje' => 'Ha sido guardada la persona'];
         } catch (exception $e) {
             return $e->getMessage();
         }

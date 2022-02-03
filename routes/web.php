@@ -24,6 +24,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/test', function () {
+    return Inertia::render('Test');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,3 +35,5 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/area.php';
 require __DIR__.'/sala.php';
+require __DIR__.'/curso.php';
+require __DIR__.'/estatus.php';

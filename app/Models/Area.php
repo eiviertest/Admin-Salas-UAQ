@@ -16,4 +16,8 @@ class Area extends Model
     protected $fillable = [
         'nomArea'
     ];
+
+    public function personas(){
+        return $this->hasMany(Persona::class, 'idArea');
+    }
 }

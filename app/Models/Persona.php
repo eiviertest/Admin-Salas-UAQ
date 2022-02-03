@@ -20,4 +20,20 @@ class Persona extends Model
         'telPer',
         'idArea'
     ];
+
+    public function categoria(){
+        return $this->belongsTo(Area::class, 'idArea');
+    }
+
+    public function solicitudes(){
+        return $this->hasMany(Solicitud::class, 'idPer');
+    }
+
+    public function cursos() {
+        return $this->belongsToMany(Curso::clas, 'curso_persona');
+    }
+
+    public function area(){
+        return $this->hasOne(Area::class);
+    }
 }

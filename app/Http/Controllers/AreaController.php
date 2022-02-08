@@ -42,16 +42,15 @@ class AreaController extends Controller
     /**
      * Actualiza una area/dependencia
      *
-     * @param  int  $id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         $this->validarDatos($request);
         try {
-            $area = Area::findOrFail($id);
+            $area = Area::findOrFail($request->id);
             $area->nomArea = $request->nomArea;
             $area->save();
             return ['mensaje' => 'Ha sido actualizada el área'];
@@ -69,15 +68,14 @@ class AreaController extends Controller
     /**
      * Elimina una area/dependencia
      *
-     * @param int $id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $area = Area::findOrFail($id);
+            $area = Area::findOrFail($request->id);
             $area->delete();
             return ['mensaje' => 'Ha sido eliminada el área'];
         } catch (exception $e) {

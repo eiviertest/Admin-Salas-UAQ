@@ -16,11 +16,11 @@ class SolicitudController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        //if(!$request->ajax()) return redirect('/');
         $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
                         ->orderBy('solicitud.fecha', 'DESC')
                         ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
-                        ->join('estatus as e', 'solicitud.idEstado', '=', 'e.idEstado')
+                        ->join('estatus as e', 'solicitud.idEst', '=', 'e.idEst')
                         ->where('e.nomEst', '!=', 'Aceptado')
                         ->persona(Auth::user()->id)
                         ->paginate(10);
@@ -35,11 +35,11 @@ class SolicitudController extends Controller
      */
     public function index_admin(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        //if(!$request->ajax()) return redirect('/');
         $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
                         ->orderBy('solicitud.fecha', 'DESC')
                         ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
-                        ->join('estatus as e', 'solicitud.idEstado', '=', 'e.idEstado')
+                        ->join('estatus as e', 'solicitud.idEst', '=', 'e.idEst')
                         ->paginate(10);
         return ['solicitudes' => $solicitudes];
     }
@@ -75,11 +75,11 @@ class SolicitudController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
+    public function update(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $solicitud = Solicitud::findOrFail($id);
+            $solicitud = Solicitud::findOrFail($request->id);
             $solicitud->idEst = $request->idEst;
             $solicitud->save();
             return ['mensaje' => 'Ha sido actualizada la solicitud'];

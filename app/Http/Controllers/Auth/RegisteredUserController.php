@@ -41,7 +41,7 @@ class RegisteredUserController extends Controller
             'nomPer' => 'required|string|max:200',
             'apePatPer' => 'required|string|max:200',
             'apeMatPer' => 'string|max:200',
-            'telPer' => 'int|max:11' 
+            'telPer' => 'int|digits:10' 
         ]);
 
         try {

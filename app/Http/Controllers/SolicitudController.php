@@ -17,14 +17,31 @@ class SolicitudController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $solicitudes = Solicitud::select()
-                        ->orderBy('nomSala', 'ASC')
+        $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
+                        ->orderBy('solicitud.fecha', 'DESC')
                         ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
                         ->join('estatus as e', 'solicitud.idEstado', '=', 'e.idEstado')
                         ->where('e.nomEst', '!=', 'Aceptado')
                         ->persona(Auth::user()->id)
                         ->paginate(10);
-        return ['salas' => $salas];
+        return ['solicitudes' => $solicitudes];
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index_admin(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+        $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
+                        ->orderBy('solicitud.fecha', 'DESC')
+                        ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
+                        ->join('estatus as e', 'solicitud.idEstado', '=', 'e.idEstado')
+                        ->paginate(10);
+        return ['solicitudes' => $solicitudes];
     }
 
     /**

@@ -26,7 +26,7 @@
 
         <div>
             <BreezeLabel for="telPer" value="Número de contacto" />
-            <BreezeInput id="telPer" type="number" maxlength="10" minlength="10" class="mt-1 block w-full" v-model="form.telPer" required autofocus />
+            <BreezeInput id="telPer" type="number" maxlength="11" minlength="9" class="mt-1 block w-full" v-model="form.telPer" required autofocus />
         </div>
 
         <div>

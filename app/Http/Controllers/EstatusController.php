@@ -29,10 +29,10 @@ class EstatusController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $estatus = new Estatus();
-            $estatus->nomEstatus = $request->nomEstatus;
+            $estatus->nomEst = $request->nomEst;
             $estatus->save();
             return ['mensaje' => 'Ha sido guardado el estado'];
         } catch (exception $e) {
@@ -48,10 +48,10 @@ class EstatusController extends Controller
     public function update(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $estatus = Estatus::findOrFail($request->id);
-            $estatus->nomEstatus = $request->nomEstatus;
+            $estatus->nomEst = $request->nomEst;
             $estatus->save();
             return ['mensaje' => 'Ha sido actualizado el estado'];
         } catch (exception $e) {
@@ -66,22 +66,21 @@ class EstatusController extends Controller
      */
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomSal' => 'required|string|max:200|unique:estatus',
+            'nomEst' => 'required|string|max:200|unique:estatus',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $estatus = Estatus::findOrFail($id);
+            $estatus = Estatus::findOrFail($request->id);
             $estatus->delete();
             return ['mensaje' => 'Ha sido eliminado el estado'];
         } catch (exception $e) {

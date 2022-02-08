@@ -15,7 +15,7 @@ class CreateEstatusesTable extends Migration
     {
         Schema::create('estatus', function (Blueprint $table) {
             $table->id('idEst')->comment('Identificador autoincremental');;
-            $table->string('varchar', 30)->comment('Estado de la sala');
+            $table->string('nomEst', 30)->comment('Estado de la sala');
             $table->timestamps();
         });
     }

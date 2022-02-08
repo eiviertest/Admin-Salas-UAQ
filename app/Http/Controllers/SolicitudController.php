@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class SolicitudController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista las solicitudes del usuario logeado
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -28,7 +28,7 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Lista las solicitudes para administrador
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -45,7 +45,7 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena una nueva solicitud
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -53,11 +53,15 @@ class SolicitudController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
+        $horafin = $request->horainicio + $request->horas_solicitadas;
         try {
             $solicitud = new Solicitud();
             $solicitud->rutaSol = $request->nomCur;
-            $solicitud->idPer = $request->fecInCur;
-            $solicitud->idEst = $request->fecFinCur;
+            $solicitud->idPer = Auth::user()->persona()->id;
+            $solicitud->idEst = 1;
+            $solicitud->fecha = $request->fecha;
+            $solicitud->horainicio = $request->horainicio;
+            $solicitud->horafin = $horafin;
             $solicitud->save();
             return ['mensaje' => 'Ha sido guardado la solicitud'];
         } catch (exception $e) {
@@ -66,7 +70,7 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el estatus de la solicitud
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -82,16 +86,5 @@ class SolicitudController extends Controller
         } catch (exception $e) {
             return $e->getMessage();
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Solicitud  $solicitud
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Solicitud $solicitud)
-    {
-        //
     }
 }

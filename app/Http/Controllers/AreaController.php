@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 class AreaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista todas las areas, dependencias registradoas
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         $areas = Area::orderBy('nomArea', 'ASC')->paginate(10);
@@ -20,14 +21,14 @@ class AreaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena una area/dependencia
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $area = new Area();
             $area->nomArea = $request->nomArea;
@@ -39,17 +40,18 @@ class AreaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza una area/dependencia
      *
+     * @param  int  $id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
-            $area = Area::findOrFail($request->id);
+            $area = Area::findOrFail($id);
             $area->nomArea = $request->nomArea;
             $area->save();
             return ['mensaje' => 'Ha sido actualizada el área'];
@@ -65,12 +67,13 @@ class AreaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina una area/dependencia
      *
      * @param int $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if(!$request->ajax()) return redirect('/');
         try {

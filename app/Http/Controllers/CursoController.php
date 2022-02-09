@@ -49,7 +49,7 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
         $this->validarDatos($request);
         try {
             $curso = new Curso();

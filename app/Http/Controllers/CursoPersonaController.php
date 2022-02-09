@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\CursoPersona;
+use App\Models\Curso;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CursoPersonaController extends Controller
@@ -36,6 +39,41 @@ class CursoPersonaController extends Controller
     public function store(Request $request)
     {
         //
+    }
+    
+    /**
+     * Descargar los cursos por semestre
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function cursos_impartidos(Request $request){
+        if(!$request->ajax()) return redirect('/');
+        $fecha_actual = Carbon::now()->format('m-d');
+        if($fecha_actual < '07-01') { 
+            //Primer semestre
+        }else{
+            //Segundo semestre
+        }
+    }
+
+    /**
+     * Descargar las personas por curso
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function concentrado_curso(Request $request){
+        if(!$request->ajax()) return redirect('/');
+        $personas = CursoPersona::select('c.nomCur', 'c.fecInCur', 'c.fecFinCur', DB::raw('CONCAT(p.nomPer, " ", p.apeMatPer, " ", p.apePatPer) as nombre'), 'a.nomArea')
+                    ->join('curso as c', 'curso_persona.idCur', '=', 'c.idCur')
+                    ->join('persona as p', 'curso_persona.idPer', '=', 'p.idPer')
+                    ->join('area as a', 'a.idArea', '=', 'p.idArea')
+                    ->where('curso_persona.idCur', '=', $request->idCur)
+                    ->get();
+        $sala_curso = Curso::select('nomSala')
+                            ->join('sala as s', 's.idSala', '=', 'curso.idSala')
+                            ->where('idCur', '=', $request->idCur)
+                            ->first();
+        return $sala_curso;
     }
 
     /**

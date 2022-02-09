@@ -15,8 +15,8 @@ class CreateHorarioCursosTable extends Migration
     {
         Schema::create('horario_curso', function (Blueprint $table) {
             $table->id('idHor');
-            $table->date('horIn')->comment('Hora de inicio');
-            $table->date('horFin')->comment('Hora de inicio');
+            $table->time('horIn')->comment('Hora de inicio');
+            $table->time('horFin')->comment('Hora de inicio');
             $table->unsignedBigInteger('idCur');
             $table->foreign('idCur')->references('idCur')->on('curso');
             $table->timestamps();

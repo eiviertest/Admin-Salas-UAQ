@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CursoPersonaController;
 use Inertia\Inertia;
 
 /*
@@ -47,6 +48,12 @@ Route::get('/estatuss', function () {
 Route::get('/salas', function () {
     return Inertia::render('Salas');
 })->middleware(['auth', 'verified'])->name('salas');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/enrolarse', [CursoPersonaController::class, 'enrolarse_curso']);
+    Route::post('/rechazar_persona_curso', [CursoPersonaController::class, 'rechazar_persona_curso']);
+    Route::post('/aceptar_persona_curso', [CursoPersonaController::class, 'aceptar_persona_curso']);
+});
 
 require __DIR__.'/auth.php';
 require __DIR__.'/area.php';

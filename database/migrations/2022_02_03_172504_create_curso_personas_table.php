@@ -17,6 +17,7 @@ class CreateCursoPersonasTable extends Migration
             $table->primary(['idCur', 'idPer']);
             $table->unsignedBigInteger('idCur');
             $table->unsignedBigInteger('idPer');
+            $table->string('estatus', 30)->default('En proceso');
             $table->foreign('idCur')->references('idCur')->on('curso');
             $table->foreign('idPer')->references('idPer')->on('persona');
             $table->timestamps();

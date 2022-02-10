@@ -5,3 +5,58 @@
 .table tbody tr {
     @apply bg-white border-b;
 }
+
+.table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.table thead.cabecera{
+    @apply text-sm font-medium px-6 py-4 text-left;
+    background-color: cadetblue;
+}
+
+.btn {
+    @apply font-bold py-2 px-4 rounded;
+  }
+  .btn-blue {
+    @apply bg-blue-500 text-white;
+    margin: -20px -50px; 
+    position:relative;
+    top:50%; 
+    left:50%;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
+  .btn-green {
+    @apply bg-green-500 text-white;
+  }
+  .btn-green:hover {
+    @apply bg-green-700;
+  }
+  .btn-red {
+    background-color: red;
+    color: white;
+  }
+  .btn-red:hover {
+    @apply bg-red-700;
+  }
+.form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+.form input {
+    width: 90%;
+    height: 30px;
+    margin: 0.5rem;
+  }
+.div{
+    text-align: center;
+}
+  

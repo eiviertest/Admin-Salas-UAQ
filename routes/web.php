@@ -32,6 +32,22 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/solicitud', function () {
+    return Inertia::render('Solicitudes');
+})->middleware(['auth', 'verified'])->name('solicitud');
+
+Route::get('/areas', function () {
+    return Inertia::render('Areas');
+})->middleware(['auth', 'verified'])->name('areas');
+
+Route::get('/estatuss', function () {
+    return Inertia::render('Estatus');
+})->middleware(['auth', 'verified'])->name('estatuss');
+
+Route::get('/salas', function () {
+    return Inertia::render('Salas');
+})->middleware(['auth', 'verified'])->name('salas');
+
 require __DIR__.'/auth.php';
 require __DIR__.'/area.php';
 require __DIR__.'/sala.php';

@@ -20,6 +20,10 @@ class Solicitud extends Model
         'idEst'
     ];
 
+    public function scopePersona($query, $idPer){
+        return $query->where('solicitud.idPer', '=', $idPer);
+    }
+
     public function persona(){
         return $this->belongsTo(Persona::class, 'idPer');
     }

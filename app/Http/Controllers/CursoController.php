@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curso;
+use App\Models\HorarioCurso;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista los cursos activos
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -16,30 +17,32 @@ class CursoController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $cursos = Curso::orderBy('nomCur', 'ASC')->paginate(10);
+        $cursos = Curso::select('curso.idCuro', 'curso.nomCur', 'curso.fecInCur', 'curso.fecFinCur', 'curso.reqCur', 'h.horIn', 'h.horFin')
+                        ->join('horario_curso as h', 'curso.idCur', '=', 'h.idCur')
+                        ->orderBy('nomCur', 'ASC')->where('curso.estado', '=', '1')->paginate(10);
         return ['cursos' => $cursos];
     }
 
     /**
-     * Update the specified resource in storage.
+     * Valida los datos de curso.
      *
      * @param  \Illuminate\Http\Request  $request
      */
     public function validarDatos(Request $request) {
         $request->validate([
-            'nomCur' => 'required|string|max:200|unique:sala',
+            'nomCur' => 'required|string|max:200|unique:curso',
             'fecInCur' => 'required|date',
             'fecFinCur' => 'required|date',
             'reqCur' => 'required|string|max:100',
             'durCur' => 'required|int|max:40',
-            'estado' => 'required|bool',
-            'cupCur' => 'required|int|max:1',
+            'cupCur' => 'required|int|max:10',
             'idSala' => 'required|int',
+            'horarios' => 'required|array|min:1'
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guarda un curso.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -47,7 +50,7 @@ class CursoController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $curso = new Curso();
             $curso->nomCur = $request->nomCur;
@@ -55,9 +58,12 @@ class CursoController extends Controller
             $curso->fecFinCur = $request->fecFinCur;
             $curso->reqCur = $request->reqCur;
             $curso->durCur = $request->durCur;
-            $curso->estado = 'true';
+            $curso->estado = 1;
             $curso->cupCur = $request->cupCur;
+            $curso->idSala = $request->idSala;
             $curso->save();
+            $idCurso = $curso->idCur;
+            $this->agregarHorarioCurso($request->horarios, $idCurso);
             return ['mensaje' => 'Ha sido guardado el curso'];
         } catch (exception $e) {
             return $e->getMessage();
@@ -65,18 +71,38 @@ class CursoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
+     * Agregar horario(s) a un curso
+     *¿
+     * @param array $horarios;
+     * @param int $idCurso;
+     */
+    public function agregarHorarioCurso($horarios, $idCurso){
+        try {
+            foreach ($horarios as $horario) {
+                $horariocurso = new HorarioCurso();
+                $horariocurso->idCur = $idCurso;
+                $horariocurso->horIn = $horario["horIn"];
+                $horariocurso->horFin = $horario["horFin"];
+                $horariocurso->save();
+            }
+        } catch (exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Deshabilita el curso
+     *¿
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function disable(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $curso = Curso::findOrFail($id);
-            $curso->delete();
+            $curso = Curso::findOrFail($request->id);
+            $curso->estado = 0;
+            $curso->save();
             return ['mensaje' => 'Ha sido eliminado el curso'];
         } catch (exception $e) {
             return $e->getMessage();

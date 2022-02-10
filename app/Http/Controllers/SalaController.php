@@ -16,7 +16,7 @@ class SalaController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $salas = Sala::orderBy('nomSala', 'ASC')->paginate(10);
+        $salas = Sala::select('idSala as ide', 'nomSala as nombre')->orderBy('nomSala', 'ASC')->paginate(10);
         return ['salas' => $salas];
     }
 
@@ -29,7 +29,7 @@ class SalaController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $sala = new Sala();
             $sala->nomSala = $request->nomSala;
@@ -60,7 +60,7 @@ class SalaController extends Controller
     public function update(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        validarDatos($request);
+        $this->validarDatos($request);
         try {
             $sala = Sala::findOrFail($request->id);
             $sala->nomSala = $request->nomSala;
@@ -74,14 +74,14 @@ class SalaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         try {
-            $sala = Sala::findOrFail($id);
+            $sala = Sala::findOrFail($request->id);
             $sala->delete();
             return ['mensaje' => 'Ha sido eliminada la sala'];
         } catch (exception $e) {

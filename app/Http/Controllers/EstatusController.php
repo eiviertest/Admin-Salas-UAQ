@@ -16,7 +16,7 @@ class EstatusController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $estados = Estatus::orderBy('nomEst', 'ASC')->paginate(10);
+        $estados = Estatus::select('idEst as ide', 'nomEst as nombre')->orderBy('nomEst', 'ASC')->paginate(10);
         return ['estados' => $estados];
     }
 

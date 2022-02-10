@@ -15,8 +15,8 @@ class AreaController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
-        $areas = Area::orderBy('nomArea', 'ASC')->paginate(10);
+        //if(!$request->ajax()) return redirect('/');
+        $areas = Area::select('idArea as ide', 'nomArea as nombre')->orderBy('nomArea', 'ASC')->paginate(10);
         return ['areas' => $areas];
     }
 

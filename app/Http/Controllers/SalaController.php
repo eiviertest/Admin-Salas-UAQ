@@ -16,7 +16,7 @@ class SalaController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $salas = Sala::orderBy('nomSala', 'ASC')->paginate(10);
+        $salas = Sala::select('idSala as ide', 'nomSala as nombre')->orderBy('nomSala', 'ASC')->paginate(10);
         return ['salas' => $salas];
     }
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Solicitud;
+use App\Models\Persona;
+use App\Models\Estatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,13 +18,14 @@ class SolicitudController extends Controller
      */
     public function index(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
+        $idPersona = $this->getIdPersona(Auth::user()->id);
         $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
                         ->orderBy('solicitud.fecha', 'DESC')
                         ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
                         ->join('estatus as e', 'solicitud.idEst', '=', 'e.idEst')
                         ->where('e.nomEst', '!=', 'Aceptado')
-                        ->persona(Auth::user()->id)
+                        ->persona($idPersona)
                         ->paginate(10);
         return ['solicitudes' => $solicitudes];
     }
@@ -35,8 +38,8 @@ class SolicitudController extends Controller
      */
     public function index_admin(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
-        $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
+        if(!$request->ajax()) return redirect('/');
+        $solicitudes = Solicitud::select('s.nomSala as sala', 'solicitud.rutaSol', 'solicitud.fecha as fecha', 'solicitud.hora as hora', 'e.nomEst as estado')
                         ->orderBy('solicitud.fecha', 'DESC')
                         ->join('sala as s', 'solicitud.idSal', '=', 's.idSala')
                         ->join('estatus as e', 'solicitud.idEst', '=', 'e.idEst')
@@ -53,12 +56,21 @@ class SolicitudController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
+        $idPersona = $this->getIdPersona(Auth::user()->id);
+        $nombreEstatus = "En proceso";
         $horafin = $request->horainicio + $request->horas_solicitadas;
+        $idEstatus = $this->getIdEstatus($nombreEstatus);
+        if($idEstatus == null) {
+            $estatus = new Estatus();
+            $estatus->nomEst = 'En proceso';
+            $estatus->save();
+            $idEstatus = $estatus->idEst;
+        }
         try {
             $solicitud = new Solicitud();
-            $solicitud->rutaSol = $request->nomCur;
-            $solicitud->idPer = Auth::user()->persona()->id;
-            $solicitud->idEst = 1;
+            $solicitud->rutaSol = $request->rutaSol;
+            $solicitud->idPer = $idPersona;
+            $solicitud->idEst = $idEstatus;
             $solicitud->fecha = $request->fecha;
             $solicitud->horainicio = $request->horainicio;
             $solicitud->horafin = $horafin;

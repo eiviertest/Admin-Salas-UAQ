@@ -17,9 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
+    return Inertia::render('Auth/Login', [
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
@@ -62,3 +60,4 @@ require __DIR__.'/curso.php';
 require __DIR__.'/estatus.php';
 require __DIR__.'/solicitud.php';
 require __DIR__.'/reportes.php';
+require __DIR__.'/menu.php';

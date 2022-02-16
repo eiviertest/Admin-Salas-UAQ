@@ -26,9 +26,9 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <!-- <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Forgot your password?
-            </Link> -->
+            <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                No estoy registrado
+            </Link>
 
             <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 Iniciar sesión
